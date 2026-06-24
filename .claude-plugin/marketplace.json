@@ -1,0 +1,13 @@
+{
+  "name": "eclair-marketplace",
+  "owner": {
+    "name": "Eclair"
+  },
+  "plugins": [
+    {
+      "name": "example-plugin",
+      "source": "./plugins/example-plugin",
+      "description": "A minimal demo plugin showing the basic structure of agents, skills, and manifest files."
+    }
+  ]
+}
