@@ -1,4 +1,4 @@
-# CLAUDE.md
+# AGENTS.md
 
 AI-facing guidance for working in this repository.
 

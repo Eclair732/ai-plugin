@@ -1,0 +1,9 @@
+{
+  "name": "industry-research",
+  "displayName": "Industry Research",
+  "description": "Conduct structured industry research and produce Chinese markdown industry research reports.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Eclair"
+  }
+}

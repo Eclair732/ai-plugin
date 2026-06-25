@@ -1,13 +1,18 @@
 {
   "name": "eclair-marketplace",
+  "description": "A personal marketplace for reusable Claude Code and Codex skills, agents, plugins, and related AI workflow components.",
   "owner": {
     "name": "Eclair"
   },
   "plugins": [
     {
-      "name": "example-plugin",
-      "source": "./plugins/example-plugin",
-      "description": "A minimal demo plugin showing the basic structure of agents, skills, and manifest files."
+      "name": "industry-research",
+      "source": "./plugins/industry-research",
+      "description": "Conduct structured industry research and produce Chinese markdown industry research reports.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Eclair"
+      }
     }
   ]
 }

@@ -1,8 +1,0 @@
-{
-  "name": "example-plugin",
-  "description": "A minimal demo plugin for Claude Code showing the basic structure of agents, skills, and manifest files.",
-  "version": "0.1.0",
-  "author": {
-    "name": "Eclair"
-  }
-}

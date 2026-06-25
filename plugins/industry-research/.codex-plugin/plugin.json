@@ -1,0 +1,34 @@
+{
+  "name": "industry-research",
+  "version": "0.1.0",
+  "description": "Conduct structured industry research and produce Chinese markdown industry research reports.",
+  "author": {
+    "name": "Eclair"
+  },
+  "skills": "./skills/",
+  "license": "MIT",
+  "keywords": [
+    "industry-research",
+    "market-analysis",
+    "business-strategy",
+    "chinese-report"
+  ],
+  "interface": {
+    "displayName": "Industry Research",
+    "shortDescription": "Structured Chinese industry research reports.",
+    "longDescription": "Research an industry, market, sector, niche, or business track with source-grounded analysis of market size, growth drivers, value chain, competition, moats, financial metrics, risks, opportunities, and recommended next steps.",
+    "developerName": "Eclair",
+    "category": "Research",
+    "capabilities": [
+      "Research",
+      "Analysis",
+      "Writing"
+    ],
+    "defaultPrompt": [
+      "研究中国AI硬件行业",
+      "分析美国宠物保险市场",
+      "评估东南亚跨境电商机会"
+    ],
+    "brandColor": "#2563EB"
+  }
+}
