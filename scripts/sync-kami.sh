@@ -29,7 +29,7 @@ if [[ ! -d "$UPSTREAM_PLUGIN" ]]; then
   exit 1
 fi
 
-VERSION="$(python3 - "$UPSTREAM_PLUGIN/.codex-plugin/plugin.json" <<'PY'
+UPSTREAM_VERSION="$(python3 - "$UPSTREAM_PLUGIN/.codex-plugin/plugin.json" <<'PY'
 import json
 import sys
 from pathlib import Path
@@ -39,29 +39,65 @@ print(manifest.get("version", "0.0.0"))
 PY
 )"
 COMMIT="$(git -C "$TMP_DIR/Kami" rev-parse HEAD)"
+SHORT_COMMIT="${COMMIT:0:12}"
 SYNC_DATE="$(date +%F)"
 
-echo "Syncing Kami $VERSION at $COMMIT"
+PREVIOUS_COMMIT=""
+PREVIOUS_UPSTREAM_VERSION=""
+PREVIOUS_PACKAGE_VERSION=""
+if [[ -f "$ROOT_DIR/plugins/kami/SOURCE.md" ]]; then
+  PREVIOUS_COMMIT="$(sed -n 's/^- Mirrored commit: `\\(.*\\)`/\\1/p' "$ROOT_DIR/plugins/kami/SOURCE.md" | head -1)"
+  PREVIOUS_UPSTREAM_VERSION="$(sed -n 's/^- Upstream version: `\\(.*\\)`/\\1/p' "$ROOT_DIR/plugins/kami/SOURCE.md" | head -1)"
+fi
+if [[ -f "$ROOT_DIR/plugins/kami/.codex-plugin/plugin.json" ]]; then
+  PREVIOUS_PACKAGE_VERSION="$(python3 - "$ROOT_DIR/plugins/kami/.codex-plugin/plugin.json" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+manifest = json.loads(Path(sys.argv[1]).read_text())
+print(manifest.get("version", ""))
+PY
+)"
+fi
+
+if [[ -n "${KAMI_PACKAGE_VERSION:-}" ]]; then
+  PACKAGE_VERSION="$KAMI_PACKAGE_VERSION"
+elif [[ "$COMMIT" == "$PREVIOUS_COMMIT" && -n "$PREVIOUS_PACKAGE_VERSION" ]]; then
+  PACKAGE_VERSION="$PREVIOUS_PACKAGE_VERSION"
+elif [[ -z "$PREVIOUS_UPSTREAM_VERSION" || "$UPSTREAM_VERSION" != "$PREVIOUS_UPSTREAM_VERSION" ]]; then
+  PACKAGE_VERSION="$UPSTREAM_VERSION"
+else
+  PACKAGE_VERSION="${UPSTREAM_VERSION}+eclair.${SHORT_COMMIT}"
+fi
+
+echo "Syncing Kami upstream $UPSTREAM_VERSION as package $PACKAGE_VERSION at $COMMIT"
 rm -rf "$ROOT_DIR/plugins/kami"
 mkdir -p "$ROOT_DIR/plugins"
 cp -R "$UPSTREAM_PLUGIN" "$ROOT_DIR/plugins/kami"
 mkdir -p "$ROOT_DIR/plugins/kami/.claude-plugin"
 
-python3 - "$ROOT_DIR" "$VERSION" "$COMMIT" "$SYNC_DATE" <<'PY'
+python3 - "$ROOT_DIR" "$UPSTREAM_VERSION" "$PACKAGE_VERSION" "$COMMIT" "$SYNC_DATE" <<'PY'
 import json
 import sys
 from pathlib import Path
 
 root = Path(sys.argv[1])
-version = sys.argv[2]
-commit = sys.argv[3]
-sync_date = sys.argv[4]
+upstream_version = sys.argv[2]
+package_version = sys.argv[3]
+commit = sys.argv[4]
+sync_date = sys.argv[5]
+
+codex_manifest_path = root / "plugins/kami/.codex-plugin/plugin.json"
+codex_manifest = json.loads(codex_manifest_path.read_text())
+codex_manifest["version"] = package_version
+codex_manifest_path.write_text(json.dumps(codex_manifest, indent=2, ensure_ascii=False) + "\n")
 
 claude_plugin = {
     "name": "kami",
     "displayName": "Kami",
     "description": "Typeset professional documents and landing pages using the Kami design system.",
-    "version": version,
+    "version": package_version,
     "author": {
         "name": "Tw93",
         "email": "hitw93@gmail.com",
@@ -78,7 +114,8 @@ source_md = f"""# Kami Source
 
 - Upstream repository: https://github.com/tw93/Kami
 - Mirrored commit: `{commit}`
-- Upstream version: `{version}`
+- Upstream version: `{upstream_version}`
+- Local package version: `{package_version}`
 - License: MIT, see `skills/kami/LICENSE`
 - Last synced: {sync_date}
 
@@ -93,7 +130,7 @@ claude_entry = {
     "name": "kami",
     "source": "./plugins/kami",
     "description": "Typeset professional documents and landing pages using the Kami design system.",
-    "version": version,
+    "version": package_version,
     "category": "documents",
     "homepage": "https://github.com/tw93/Kami",
     "author": {
@@ -112,7 +149,7 @@ codex_entry = {
         "path": "./plugins/kami",
     },
     "description": "Typeset professional documents and landing pages using the Kami design system.",
-    "version": version,
+    "version": package_version,
     "category": "Productivity",
     "policy": {
         "installation": "AVAILABLE",

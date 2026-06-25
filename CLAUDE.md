@@ -82,6 +82,10 @@ files in the same change:
   description, workflow, and references.
 - `plugins/<plugin-name>/skills/<skill-name>/references/`: supporting templates
   and domain material.
+- Plugin version numbers: whenever plugin-distributed content changes, bump the
+  plugin version and keep it identical in the Claude manifest, Codex manifest,
+  Claude marketplace entry, and Codex marketplace entry. Repo-doc-only changes
+  do not require a plugin version bump.
 - `plugins/<plugin-name>/SOURCE.md`: source attribution for mirrored upstream
   add-ons.
 - `scripts/sync-*.sh`: sync scripts for mirrored upstream add-ons.
@@ -89,7 +93,10 @@ files in the same change:
   and test instructions when workflow expectations change.
 
 For upstream-mirrored add-ons such as `kami`, prefer running the sync script
-first, then review and patch local marketplace/docs/source notes as needed.
+first, then review and patch local marketplace/docs/source notes as needed. If
+upstream content changed but upstream did not bump its version, use a local
+SemVer build suffix such as `1.9.0+eclair.<commit>` so installers can fetch a
+new plugin snapshot.
 
 ## Review & Test
 
