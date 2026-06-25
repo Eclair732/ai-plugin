@@ -17,6 +17,20 @@
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       }
+    },
+    {
+      "name": "kami",
+      "source": {
+        "source": "local",
+        "path": "./plugins/kami"
+      },
+      "description": "Typeset professional documents and landing pages using the Kami design system.",
+      "version": "1.9.0",
+      "category": "Productivity",
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      }
     }
   ]
 }

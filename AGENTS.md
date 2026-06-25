@@ -8,9 +8,12 @@ This repository is a personal component registry for Claude Code and Codex. It
 stores reusable AI development components such as skills, plugins, subagents,
 hooks, MCP configuration, scripts, and references.
 
-The current active component is `industry-research`: a shared skill packaged as
-an installable plugin for both Claude Code and Codex. It conducts structured
-industry research and produces Chinese markdown research reports.
+Current active components include:
+
+- `industry-research`: a shared skill packaged as an installable plugin for
+  structured industry research and Chinese markdown research reports.
+- `kami`: a mirrored upstream skill from `https://github.com/tw93/Kami` for
+  professional document and landing-page typesetting.
 
 ## Project Structure
 
@@ -31,6 +34,20 @@ plugins/
         SKILL.md                           # Skill instructions and trigger metadata
         references/
           report-template.md               # Chinese industry report template
+  kami/
+    .claude-plugin/
+      plugin.json                          # Claude Code plugin manifest
+    .codex-plugin/
+      plugin.json                          # Codex plugin manifest
+    SOURCE.md                              # Upstream source and sync metadata
+    skills/
+      kami/
+        SKILL.md                           # Mirrored Kami skill instructions
+        assets/                            # Templates, diagrams, fonts, images
+        references/                        # Kami design and writing references
+        scripts/                           # Kami build and verification scripts
+scripts/
+  sync-kami.sh                             # Refresh Kami from upstream
 ```
 
 ## How To Extend
@@ -49,6 +66,30 @@ plugins/
   `plugins/<plugin-name>/skills/<skill-name>/references/`.
 - Keep plugin folders self-contained. Installed plugins are copied into local
   caches, so avoid references to files outside the plugin directory.
+
+## Update Rule
+
+After adding, removing, renaming, or modifying any add-on, update all related
+files in the same change:
+
+- `README.md`: add-on list, installation notes, and precautions.
+- `.claude-plugin/marketplace.json`: Claude Code marketplace entry.
+- `.agents/plugins/marketplace.json`: Codex marketplace entry.
+- `plugins/<plugin-name>/.claude-plugin/plugin.json`: Claude Code plugin
+  manifest.
+- `plugins/<plugin-name>/.codex-plugin/plugin.json`: Codex plugin manifest.
+- `plugins/<plugin-name>/skills/<skill-name>/SKILL.md`: skill name,
+  description, workflow, and references.
+- `plugins/<plugin-name>/skills/<skill-name>/references/`: supporting templates
+  and domain material.
+- `plugins/<plugin-name>/SOURCE.md`: source attribution for mirrored upstream
+  add-ons.
+- `scripts/sync-*.sh`: sync scripts for mirrored upstream add-ons.
+- `AGENTS.md` and `CLAUDE.md`: project structure, extension rules, references,
+  and test instructions when workflow expectations change.
+
+For upstream-mirrored add-ons such as `kami`, prefer running the sync script
+first, then review and patch local marketplace/docs/source notes as needed.
 
 ## Review & Test
 
@@ -88,3 +129,5 @@ repository.
   `plugins/industry-research/skills/industry-research/SKILL.md`.
 - Current report template:
   `plugins/industry-research/skills/industry-research/references/report-template.md`.
+- Kami source metadata: `plugins/kami/SOURCE.md`.
+- Kami sync script: `scripts/sync-kami.sh`.

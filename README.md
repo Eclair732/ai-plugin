@@ -15,6 +15,9 @@ AI assistant capabilities across both tools.
 | `industry-research` | Plugin | Claude Code, Codex | Installable package that exposes the `industry-research` skill. |
 | `industry-research` | Skill | Claude Code, Codex | Conduct structured industry research and produce Chinese markdown research reports. |
 | `report-template.md` | Reference | Claude Code, Codex | Report template for full Chinese industry research reports, covering market size, value chain, business model, demand, competition, moats, metrics, risks, opportunities, and recommendations. |
+| `kami` | Plugin | Claude Code, Codex | Installable package that exposes the upstream Kami document-design skill. |
+| `kami` | Skill | Claude Code, Codex | Typeset professional documents and landing pages, including resumes, one-pagers, reports, letters, portfolios, slides, equity reports, changelogs, and product landing pages. |
+| `scripts/sync-kami.sh` | Script | Local maintenance | Refresh the local `kami` plugin mirror from `tw93/Kami` when upstream changes. |
 
 ## Installation
 
@@ -26,16 +29,18 @@ Add this repository as a plugin marketplace:
 /plugin marketplace add Eclair732/ai-plugin
 ```
 
-Install the current plugin:
+Install a plugin:
 
 ```text
 /plugin install industry-research@eclair-marketplace
+/plugin install kami@eclair-marketplace
 ```
 
-Invoke the skill:
+Invoke a skill:
 
 ```text
 /industry-research:industry-research
+/kami:kami
 ```
 
 ### Codex
@@ -46,14 +51,15 @@ Add this repository as a plugin marketplace:
 codex plugin marketplace add Eclair732/ai-plugin
 ```
 
-Install the current plugin:
+Install a plugin:
 
 ```bash
 codex plugin add industry-research@eclair-codex
+codex plugin add kami@eclair-codex
 ```
 
-Start a new Codex session after installation, then invoke `industry-research`
-for industry, market, sector, competitor, or business-track analysis.
+Start a new Codex session after installation, then invoke the installed skill by
+name.
 
 ## Notes & Precautions
 
@@ -66,3 +72,5 @@ for industry, market, sector, competitor, or business-track analysis.
 - Long templates, examples, schemas, and domain references should live under `references/`.
 - Keep plugin folders self-contained because installed plugins are copied into local caches.
 - Do not package local-only files such as `.DS_Store`, credentials, private notes, or temporary validation artifacts.
+- `kami` is mirrored from `https://github.com/tw93/Kami`. Its source metadata is in `plugins/kami/SOURCE.md`.
+- To refresh `kami`, run `scripts/sync-kami.sh` or `scripts/sync-kami.sh <ref>`, then review the changed files and re-run validation.
