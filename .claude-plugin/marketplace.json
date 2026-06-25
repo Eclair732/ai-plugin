@@ -18,7 +18,7 @@
       "name": "kami",
       "source": "./plugins/kami",
       "description": "Typeset professional documents and landing pages using the Kami design system.",
-      "version": "1.9.0",
+      "version": "1.9.0+eclair.meta1",
       "category": "documents",
       "homepage": "https://github.com/tw93/Kami",
       "author": {
